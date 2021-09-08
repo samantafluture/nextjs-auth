@@ -1,8 +1,12 @@
 import { FormEvent } from 'react';
 import styles from '../styles/LoginPage.module.css';
+import { setCookie } from '../utils/cookies';
 import { http } from '../utils/http';
+import { useRouter } from 'next/router';
 
 const LoginPage = () => {
+    const router = useRouter();
+
     async function onSubmit(event: FormEvent) {
         event.preventDefault();
 
@@ -14,7 +18,8 @@ const LoginPage = () => {
         ).value;
 
         const { data } = await http.post('login', { username, password });
-        console.log(data);
+        setCookie('token', data.token);
+        router.push('/private');
     }
 
     return (
