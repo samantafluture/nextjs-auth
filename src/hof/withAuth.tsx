@@ -1,5 +1,5 @@
-import { isTokenExpired } from "../utils/auth";
-import { parseCookies } from "../utils/cookies";
+import { getPayload, isTokenExpired } from '../utils/auth';
+import { parseCookies } from '../utils/cookies';
 
 // hof -> high order function (função de primeira ordem)
 export function withAuth(func: any) {
@@ -15,6 +15,16 @@ export function withAuth(func: any) {
             };
         }
 
-        return func(ctx, cookies);
+        const payload = getPayload(cookies.token);
+
+        const result = await func(ctx, cookies, payload);
+        if ('props' in result) {
+            result.props = {
+                payload,
+                ...result.props
+            };
+        }
+
+        return result;
     };
 }

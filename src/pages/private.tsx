@@ -4,16 +4,18 @@ import { http } from '../utils/http';
 
 interface PrivatePageProps {
     name: string;
+    payload: any;
 }
 
 const PrivatePage: NextPage<PrivatePageProps> = (props) => {
+    console.log(props.payload);
     return <div>Private Page - {props.name} </div>;
 };
 
 export default PrivatePage;
 
 export const getServerSideProps: GetServerSideProps = withAuth(
-    async (ct: any, cookies: any) => {
+    async (ct: any, cookies: any, payload: any) => {
         const { data } = await http.get('test', {
             headers: {
                 Authorization: `Bearer ${cookies.token}`
