@@ -15,7 +15,7 @@ const PrivatePage: NextPage<PrivatePageProps> = (props) => {
 export default PrivatePage;
 
 export const getServerSideProps: GetServerSideProps = withAuth(
-    async (ct: any, cookies: any, payload: any) => {
+    async (ctx: any, cookies: any, payload: any) => {
         const { data } = await http.get('test', {
             headers: {
                 Authorization: `Bearer ${cookies.token}`

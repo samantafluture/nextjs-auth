@@ -1,11 +1,9 @@
-import type { NextPage } from 'next'
+import type { NextPage } from 'next';
+import { useAuthHttp } from '../hooks/useAuthHttp';
 
 const Home: NextPage = () => {
-  return (
-    <div>
-      <h1>Hello world!</h1>
-    </div>
-  )
-}
+    const { data, error } = useAuthHttp('user');
+    return data ? <div>Hello world!</div> : null;
+};
 
-export default Home
+export default Home;
