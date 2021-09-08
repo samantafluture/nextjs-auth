@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { GetServerSideProps, NextPage } from 'next';
-import { isTokenExpired } from '../utils/auth';
-import { parseCookies } from '../utils/cookies';
+import { withAuth } from '../hof/withAuth';
 import { http } from '../utils/http';
 
 interface PrivatePageProps {
@@ -14,7 +12,23 @@ const PrivatePage: NextPage<PrivatePageProps> = (props) => {
 
 export default PrivatePage;
 
+export const getServerSideProps: GetServerSideProps = withAuth(
+    async (ct: any, cookies: any) => {
+        const { data } = await http.get('test', {
+            headers: {
+                Authorization: `Bearer ${cookies.token}`
+            }
+        });
+        return {
+            props: data
+        };
+    }
+);
+
+/*
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    
+   
     const cookies = parseCookies(ctx.req);
 
     if (!cookies.token || isTokenExpired(cookies.token)) {
@@ -25,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             }
         };
     }
+   
 
     const { data } = await http.get('test', {
         headers: {
@@ -56,7 +71,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
     */
 
+/*
     return {
         props: data
     };
+
+ 
 };
+*/
